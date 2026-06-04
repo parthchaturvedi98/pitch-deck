@@ -90,6 +90,33 @@
           </div>
         </div>
       </div>
+
+      <!-- Feed your own data -->
+      <div class="data-io">
+        <div class="data-io__head">
+          <span class="data-io__title">📥 Feed Your Own Data</span>
+          <span class="data-io__status" id="dataSourceStatus">Using bundled sample · Nexaris Technologies (NXRS)</span>
+        </div>
+        <div class="data-io__controls">
+          <label class="data-io__btn">
+            <input type="file" id="dataFileInput" accept=".json,.js,application/json" hidden />
+            ⬆ Upload data file
+          </label>
+          <button class="data-io__btn data-io__btn--ghost" id="pasteToggleBtn" type="button">✎ Paste JSON</button>
+          <button class="data-io__btn data-io__btn--ghost" id="downloadTemplateBtn" type="button">⬇ Download sample template</button>
+          <button class="data-io__btn data-io__btn--ghost" id="resetDataBtn" type="button" style="display:none">↺ Reset to sample</button>
+        </div>
+        <div class="data-io__paste" id="pasteArea" style="display:none">
+          <textarea id="pasteInput" class="data-io__textarea" spellcheck="false"
+            placeholder="Paste your PITCH_DATA JSON here — download the sample template first to see the exact shape…"></textarea>
+          <div class="data-io__paste-actions">
+            <button class="data-io__btn" id="applyPasteBtn" type="button">Apply JSON</button>
+            <span class="data-io__hint">Tip: download the template, edit the numbers, then upload or paste it back. Accepts pure JSON or a <code>data.js</code> file.</span>
+          </div>
+        </div>
+        <div class="data-io__msg" id="dataIoMsg"></div>
+      </div>
+
       <div class="console-actions">
         <div class="console-companion">
           <span class="console-companion__label">Orchestrates:</span>

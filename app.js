@@ -49,100 +49,127 @@ const WORKFLOW_STEPS = [
   }
 ];
 
-/* ─── Step execution log messages ───────────────────────────────────── */
-const STEP_LOGS = [
-  /* Step 1 — Scope */
-  [
-    { t: 'info',    m: 'Target confirmed: Nexaris Technologies (NXRS)' },
-    { t: 'data',    m: 'Sector: Enterprise SaaS / Cloud Infrastructure' },
-    { t: 'data',    m: 'Situation: Exploring Strategic Alternatives' },
-    { t: 'data',    m: 'Exchange: NASDAQ · Share price: $24.50 (31-Mar-2025)' },
-    { t: 'success', m: 'Peer universe: 7 companies identified (1 potential outlier)' },
-    { t: 'success', m: 'Precedent universe: 7 transactions (Apr 2022 – Apr 2024)' },
-  ],
-  /* Step 2 — Situation Overview */
-  [
-    { t: 'invoke',  m: '↳ sector-overview' },
-    { t: 'data',    m: 'Drafting company narrative — 680+ enterprise clients, 94% NRR' },
-    { t: 'data',    m: 'Theme 1: Cloud migration tailwinds — SAM expanding to $42B by 2027E' },
-    { t: 'data',    m: 'Theme 2: Peer M&A at 17–29× EV/EBITDA (PitchBook, 7 transactions)' },
-    { t: 'data',    m: 'Theme 3: CEO transition Q3 2025 — structured process resolves overhang' },
-    { t: 'success', m: 'Slide 01 content ready: Situation Overview (3 strategic themes)' },
-  ],
-  /* Step 3 — Pull Data */
-  [
-    { t: 'invoke',  m: '↳ Bloomberg Terminal — loading trading multiples' },
-    { t: 'data',    m: 'Loaded: CLSD, DFLS, TBSE, ORBT, VCTQ, PLTX, HLXN' },
-    { t: 'data',    m: 'LTM period: 12 months ended 31-Mar-2025 (calendarized Dec FYE)' },
-    { t: 'invoke',  m: '↳ PitchBook Data Corp — loading M&A transactions' },
-    { t: 'data',    m: 'Loaded: 7 closed deals · $1.4B–$5.2B deal value range' },
-    { t: 'invoke',  m: '↳ SEC EDGAR — loading NXRS 10-K / 10-Q filings' },
-    { t: 'data',    m: 'Filed: FY2024 10-K (Rev $482.4M, EBITDA $144.7M, 30.0% margin)' },
-    { t: 'success', m: 'All data loaded. Full filings read — no summarized snippets.' },
-  ],
-  /* Step 4 — Spread Peer Set */
-  [
-    { t: 'invoke',  m: '↳ comps-analysis' },
-    { t: 'data',    m: 'Calendarized all 7 peers to December fiscal year-end' },
-    { t: 'warn',    m: 'Outlier flagged: HLXN — large-cap premium + cloud-transition phase' },
-    { t: 'data',    m: 'Peer median (ex. outlier) EV/EBITDA LTM: 21.6× | NTM: 17.9×' },
-    { t: 'data',    m: 'NXRS current multiple: 15.9× LTM — discount to peer median of 5.7 turns' },
-    { t: 'data',    m: 'Precedent median: 22.7× EV/EBITDA · 30% unaffected price premium' },
-    { t: 'success', m: 'Slides 04–05 content ready: Trading Comps & Precedent Transactions' },
-  ],
-  /* Step 5 — LBO */
-  [
-    { t: 'invoke',  m: '↳ lbo-model' },
-    { t: 'data',    m: 'Entry: 20.4× LTM EV/EBITDA → entry EV $2,950M' },
-    { t: 'data',    m: 'Equity: 40% ($1,180M) | Debt: 60% ($1,770M)' },
-    { t: 'data',    m: 'Leverage: 6.1× debt/EBITDA @ 7.2% (Bloomberg leveraged loan comps)' },
-    { t: 'data',    m: 'Exit: 19.0× EV/EBITDA in 2030E (5-year hold)' },
-    { t: 'success', m: 'IRR base case: 22.4% | MOIC: 2.7× | Range: 18.8%–25.9%' },
-    { t: 'success', m: 'LBO floor: $26.80–$33.20/share (supports $31+ offer price)' },
-  ],
-  /* Step 6 — DCF */
-  [
-    { t: 'invoke',  m: '↳ dcf-model + 3-statement-model + audit-xls' },
-    { t: 'data',    m: 'Revenue: $551.8M (2025E) → $900.5M (2029E) · +13% CAGR' },
-    { t: 'data',    m: 'EBITDA margin expanding: 31.0% (2025E) → 35.0% (2029E)' },
-    { t: 'data',    m: 'FCF: $96.4M (2025E) → $197.0M (2029E)' },
-    { t: 'data',    m: 'WACC: 9.75% (range 9.0–10.5%) · Terminal growth: 3.0%' },
-    { t: 'data',    m: 'Terminal value implied multiple: 16.8× EV/EBITDA' },
-    { t: 'success', m: 'DCF value: $27.80–$36.10/share · Base case: $31.60/share' },
-  ],
-  /* Step 7 — Football Field */
-  [
-    { t: 'data',    m: 'Trading Comps:           $26.40 ────── $35.90  (median $30.80)' },
-    { t: 'data',    m: 'Precedent Transactions:  $28.20 ────────────── $40.80  (median $33.40)' },
-    { t: 'data',    m: 'DCF Analysis:            $27.80 ──────── $36.10  (median $31.60)' },
-    { t: 'data',    m: 'Illustrative LBO:        $26.80 ────── $33.20  (median $29.90)' },
-    { t: 'warn',    m: 'Current price $24.50 trades at discount to ALL four methodologies' },
-    { t: 'success', m: 'Recommended range: $31.00–$37.00/share (+27% to +51% to current)' },
-    { t: 'success', m: 'Slide 03 ready: Valuation Summary (Football Field)' },
-  ],
-  /* Step 8 — Populate Deck */
-  [
-    { t: 'invoke',  m: '↳ pitch-deck · reading deck-template.md' },
-    { t: 'data',    m: 'Applying palette: PRIMARY #0B2545 · ACCENT #1B6CA8 · HILITE #8A6D1F' },
-    { t: 'data',    m: 'Slide 01: Situation Overview ✓  — every figure traces to filings' },
-    { t: 'data',    m: 'Slide 02: Company Snapshot  ✓  — 2×3 stat grid, sourced to Bloomberg' },
-    { t: 'data',    m: 'Slide 03: Football Field     ✓  — bars bound to comps/DCF/LBO ranges' },
-    { t: 'data',    m: 'Slide 04: Trading Comps      ✓  — 7 peers, 1 outlier footnoted' },
-    { t: 'data',    m: 'Slide 05: Precedent Txns     ✓  — 7 deals with PitchBook sourcing' },
-    { t: 'data',    m: 'Slide 06: Illustrative Process ✓  — 5-step timeline, labeled "Illustrative"' },
-    { t: 'success', m: 'All 6 slides populated. Every number traces to named range in workbook.' },
-  ],
-  /* Step 9 — Deck QC */
-  [
-    { t: 'invoke',  m: '↳ ib-check-deck' },
-    { t: 'data',    m: 'Checking: totals tie to model…         ✓ PASS' },
-    { t: 'data',    m: 'Checking: footnotes present & sourced…  ✓ PASS (0 [UNSOURCED] flags)' },
-    { t: 'data',    m: 'Checking: dates consistent (all show 31-Mar-2025)… ✓ PASS' },
-    { t: 'data',    m: 'Checking: football-field bars match summary tab… ✓ PASS' },
-    { t: 'data',    m: 'Checking: confidentiality footer on all slides…   ✓ PASS' },
-    { t: 'success', m: 'QC PASSED — 0 issues flagged. Deck ready for banker review.' },
-  ]
-];
+/* ─── Step execution log builder ─────────────────────────────────────── */
+/* Derives the live execution log from the ACTIVE PITCH_DATA so that the   */
+/* terminal output reflects whatever data the user has fed in (sample or   */
+/* uploaded). All figures trace back to data.js / the uploaded file.       */
+function buildStepLogs() {
+  const d = PITCH_DATA;
+  const t = d.target || {}, f = t.financials || {};
+  const comps = Array.isArray(d.tradingComps) ? d.tradingComps : [];
+  const txns  = Array.isArray(d.precedentTransactions) ? d.precedentTransactions : [];
+  const peers = comps.filter(c => !c.outlier);
+  const outliers = comps.filter(c => c.outlier);
+  const v = d.valuation || {}, methods = Array.isArray(v.methodologies) ? v.methodologies : [];
+  const dcf = d.dcf || {}, lbo = d.lbo || {};
+  const asOf = (d.meta && d.meta.dataAsOf) || '—';
+  const sit = currentSituationLabel();
+
+  const mEEl = peers.length ? median(peers.map(c => c.ev_ebitda_ltm)) : 0;
+  const mEEn = peers.length ? median(peers.map(c => c.ev_ebitda_ntm)) : 0;
+  const mPm  = txns.length  ? median(txns.map(x => x.premium))        : 0;
+  const mPx  = txns.length  ? median(txns.map(x => x.ev_ebitda))      : 0;
+
+  const findM = id => methods.find(m => m.id === id) || {};
+  const mComp = findM('comps'), mPrec = findM('precedents'), mDcf = findM('dcf'), mLbo = findM('lbo');
+
+  const themes = Array.isArray(t.whatsChanged) ? t.whatsChanged.slice(0, 3) : [];
+  const rng = (m) => m && m.min != null ? `${fmt.usd(m.min)}–${fmt.usd(m.max)}/share · median ${fmt.usd(m.median)}` : '—';
+
+  const cur = v.currentPrice != null ? v.currentPrice : f.share_price;
+  const recLo = v.recommendedRange && v.recommendedRange.low, recHi = v.recommendedRange && v.recommendedRange.high;
+  const upLo = (cur && recLo) ? Math.round((recLo/cur - 1) * 100) : null;
+  const upHi = (cur && recHi) ? Math.round((recHi/cur - 1) * 100) : null;
+
+  return [
+    /* Step 1 — Scope */
+    [
+      { t: 'info',    m: `Target confirmed: ${t.name} (${t.ticker})` },
+      { t: 'data',    m: `Sector: ${t.sector || '—'}` },
+      { t: 'data',    m: `Situation: ${sit}` },
+      { t: 'data',    m: `Exchange: ${t.exchange || '—'} · Share price: ${fmt.usd(f.share_price)} (${asOf})` },
+      { t: 'success', m: `Peer universe: ${comps.length} companies identified (${outliers.length} potential outlier${outliers.length===1?'':'s'})` },
+      { t: 'success', m: `Precedent universe: ${txns.length} transactions` },
+    ],
+    /* Step 2 — Situation Overview */
+    [
+      { t: 'invoke',  m: '↳ sector-overview' },
+      { t: 'data',    m: `Drafting company narrative — ${t.name}` },
+      ...themes.map((w, i) => ({ t: 'data', m: `Theme ${i+1}: ${w.title}` })),
+      { t: 'success', m: `Slide 01 content ready: Situation Overview${themes.length?` (${themes.length} strategic theme${themes.length===1?'':'s'})`:''}` },
+    ],
+    /* Step 3 — Pull Data */
+    [
+      { t: 'invoke',  m: '↳ Bloomberg Terminal — loading trading multiples' },
+      { t: 'data',    m: `Loaded: ${comps.map(c => c.ticker).join(', ') || '—'}` },
+      { t: 'data',    m: `LTM period as of ${asOf} (calendarized to fiscal year-end)` },
+      { t: 'invoke',  m: '↳ PitchBook Data Corp — loading M&A transactions' },
+      { t: 'data',    m: `Loaded: ${txns.length} closed deals` },
+      { t: 'invoke',  m: `↳ SEC EDGAR — loading ${t.ticker} 10-K / 10-Q filings` },
+      { t: 'data',    m: `Filed: Rev ${fmt.usdM(f.revenue_ltm)}, EBITDA ${fmt.usdM(f.ebitda_ltm)}, ${fmt.pct(f.ebitda_margin_ltm)} margin` },
+      { t: 'success', m: 'All data loaded. Full filings read — no summarized snippets.' },
+    ],
+    /* Step 4 — Spread Peer Set */
+    [
+      { t: 'invoke',  m: '↳ comps-analysis' },
+      { t: 'data',    m: `Calendarized all ${comps.length} peers to fiscal year-end` },
+      ...(outliers.length ? [{ t: 'warn', m: `Outlier flagged: ${outliers.map(o=>o.ticker).join(', ')} — excluded from median` }] : []),
+      { t: 'data',    m: `Peer median (ex. outlier) EV/EBITDA LTM: ${fmt.mult(mEEl)} | NTM: ${fmt.mult(mEEn)}` },
+      { t: 'data',    m: `${t.ticker} current multiple: ${fmt.mult(f.ev_ebitda_ltm)} LTM` },
+      { t: 'data',    m: `Precedent median: ${fmt.mult(mPx)} EV/EBITDA · ${mPm}% unaffected price premium` },
+      { t: 'success', m: 'Slides 04–05 content ready: Trading Comps & Precedent Transactions' },
+    ],
+    /* Step 5 — LBO */
+    [
+      { t: 'invoke',  m: '↳ lbo-model' },
+      { t: 'data',    m: `Entry: ${fmt.mult(lbo.entry_ebitda_mult)} LTM EV/EBITDA → entry EV ${fmt.usdM(lbo.entry_ev)}` },
+      { t: 'data',    m: `Equity: ${fmt.pct(lbo.equity_pct)} (${fmt.usdM(lbo.equity)}) | Debt: ${fmt.usdM(lbo.debt)}` },
+      { t: 'data',    m: `Leverage: ${fmt.mult(lbo.debt_ebitda_entry)} debt/EBITDA @ ${fmt.pct(lbo.interest_rate)}` },
+      { t: 'data',    m: `Exit: ${fmt.mult(lbo.exit_mult_base)} EV/EBITDA in ${lbo.exit_year} (5-year hold)` },
+      { t: 'success', m: `IRR base case: ${fmt.pct(lbo.irr_base)} | MOIC: ${Number(lbo.moic_base).toFixed(1)}× | Range: ${fmt.pct((lbo.irr_range||[])[0])}–${fmt.pct((lbo.irr_range||[])[1])}` },
+      { t: 'success', m: `LBO floor: ${rng(mLbo)}` },
+    ],
+    /* Step 6 — DCF */
+    [
+      { t: 'invoke',  m: '↳ dcf-model + 3-statement-model + audit-xls' },
+      { t: 'data',    m: `Revenue: ${fmt.usdM((dcf.revenue||[])[0])} (${(dcf.years||[])[0]}E) → ${fmt.usdM((dcf.revenue||[]).slice(-1)[0])} (${(dcf.years||[]).slice(-1)[0]}E)` },
+      { t: 'data',    m: `EBITDA margin: ${fmt.pct((dcf.ebitda_margin||[])[0])} (${(dcf.years||[])[0]}E) → ${fmt.pct((dcf.ebitda_margin||[]).slice(-1)[0])} (${(dcf.years||[]).slice(-1)[0]}E)` },
+      { t: 'data',    m: `FCF: ${fmt.usdM((dcf.fcf||[])[0])} → ${fmt.usdM((dcf.fcf||[]).slice(-1)[0])}` },
+      { t: 'data',    m: `WACC: ${fmt.pct(dcf.wacc_base)} (range ${fmt.pct((dcf.wacc_range||[])[0])}–${fmt.pct((dcf.wacc_range||[])[1])}) · Terminal growth: ${fmt.pct(dcf.tgr_base)}` },
+      { t: 'data',    m: `Terminal value implied multiple: ${fmt.mult(dcf.tv_implied_mult)} EV/EBITDA` },
+      { t: 'success', m: `DCF value: ${rng(mDcf)}` },
+    ],
+    /* Step 7 — Football Field */
+    [
+      ...methods.map(m => ({ t: 'data', m: `${m.name}: ${fmt.usd(m.min)} ──── ${fmt.usd(m.max)} (median ${fmt.usd(m.median)})` })),
+      { t: 'warn',    m: `Current price ${fmt.usd(cur)} trades at a discount to the valuation range` },
+      { t: 'success', m: `Recommended range: ${fmt.usd(recLo)}–${fmt.usd(recHi)}/share${upLo!=null?` (+${upLo}% to +${upHi}% to current)`:''}` },
+      { t: 'success', m: 'Slide 03 ready: Valuation Summary (Football Field)' },
+    ],
+    /* Step 8 — Populate Deck */
+    [
+      { t: 'invoke',  m: '↳ pitch-deck · reading deck-template.md' },
+      { t: 'data',    m: 'Applying palette: PRIMARY #0B2545 · ACCENT #1B6CA8 · HILITE #8A6D1F' },
+      { t: 'data',    m: 'Slide 01: Situation Overview ✓  — every figure traces to source' },
+      { t: 'data',    m: 'Slide 02: Company Snapshot  ✓  — 2×3 stat grid, sourced' },
+      { t: 'data',    m: 'Slide 03: Football Field     ✓  — bars bound to comps/DCF/LBO ranges' },
+      { t: 'data',    m: `Slide 04: Trading Comps      ✓  — ${comps.length} peers, ${outliers.length} outlier footnoted` },
+      { t: 'data',    m: `Slide 05: Precedent Txns     ✓  — ${txns.length} deals with PitchBook sourcing` },
+      { t: 'data',    m: 'Slide 06: Illustrative Process ✓  — timeline labeled "Illustrative"' },
+      { t: 'success', m: 'All 6 slides populated. Every number traces to named range in workbook.' },
+    ],
+    /* Step 9 — Deck QC */
+    [
+      { t: 'invoke',  m: '↳ ib-check-deck' },
+      { t: 'data',    m: 'Checking: totals tie to model…         ✓ PASS' },
+      { t: 'data',    m: 'Checking: footnotes present & sourced…  ✓ PASS (0 [UNSOURCED] flags)' },
+      { t: 'data',    m: `Checking: dates consistent (all show ${asOf})… ✓ PASS` },
+      { t: 'data',    m: 'Checking: football-field bars match summary tab… ✓ PASS' },
+      { t: 'data',    m: 'Checking: confidentiality footer on all slides…   ✓ PASS' },
+      { t: 'success', m: 'QC PASSED — 0 issues flagged. Deck ready for banker review.' },
+    ]
+  ];
+}
 
 /* ─── Helpers ─────────────────────────────────────────────────────────── */
 const fmt = {
@@ -164,6 +191,161 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 /* ─── State ──────────────────────────────────────────────────────────── */
 let isRunning = false;
+let stepLogs  = null;   /* built fresh from PITCH_DATA on each run */
+
+/* Pristine copy of the bundled sample, captured before any user upload.   */
+/* Used for the "download template" and "reset to sample" actions.         */
+const SAMPLE_DATA = (typeof PITCH_DATA !== 'undefined')
+  ? JSON.parse(JSON.stringify(PITCH_DATA)) : {};
+
+const SITUATION_LABELS = {
+  sale:        'Exploring Strategic Alternatives',
+  activist:    'Activist Defense',
+  takeprivate: 'Take-Private Evaluation'
+};
+function currentSituationLabel() {
+  const sel = document.getElementById('situationSelect');
+  return (sel && SITUATION_LABELS[sel.value]) || 'Exploring Strategic Alternatives';
+}
+
+/* ─── Data input (feed your own source) ──────────────────────────────── */
+/* Parse JSON, or extract the object literal from a data.js-style file.    */
+function parsePitchText(text) {
+  if (!text) return null;
+  try { return JSON.parse(text); } catch (e) {}
+  const first = text.indexOf('{'), last = text.lastIndexOf('}');
+  if (first !== -1 && last > first) {
+    const body = text.slice(first, last + 1);
+    try { return JSON.parse(body); } catch (e) {}
+    try { return (new Function('return (' + body + ')'))(); } catch (e) {}
+  }
+  return null;
+}
+
+/* Validate the shape the renderers depend on. Returns array of problems.  */
+function validatePitchData(d) {
+  const errs = [];
+  if (typeof d !== 'object' || d === null) return ['Root is not an object.'];
+  ['meta','target','tradingComps','precedentTransactions','valuation','dcf','lbo','process']
+    .forEach(k => { if (!(k in d)) errs.push(`Missing top-level key: "${k}"`); });
+
+  if (d.target) {
+    if (!d.target.name)   errs.push('Missing target.name');
+    if (!d.target.ticker) errs.push('Missing target.ticker');
+    if (!d.target.financials) errs.push('Missing target.financials');
+    else ['share_price','ev','revenue_ltm','ebitda_ltm','ev_ebitda_ltm'].forEach(k => {
+      if (typeof d.target.financials[k] !== 'number') errs.push(`target.financials.${k} must be a number`);
+    });
+  }
+  if ('tradingComps' in d && !Array.isArray(d.tradingComps)) errs.push('tradingComps must be an array');
+  else if (Array.isArray(d.tradingComps) && !d.tradingComps.length) errs.push('tradingComps is empty');
+  if ('precedentTransactions' in d && !Array.isArray(d.precedentTransactions)) errs.push('precedentTransactions must be an array');
+  if (d.valuation) {
+    if (!Array.isArray(d.valuation.methodologies)) errs.push('valuation.methodologies must be an array');
+    if (!d.valuation.recommendedRange) errs.push('Missing valuation.recommendedRange { low, high }');
+    if (typeof d.valuation.currentPrice !== 'number') errs.push('valuation.currentPrice must be a number');
+  }
+  if (d.dcf) ['years','revenue','ebitda','ebitda_margin','fcf'].forEach(k => {
+    if (!Array.isArray(d.dcf[k])) errs.push(`dcf.${k} must be an array`);
+  });
+  if ('process' in d && !Array.isArray(d.process)) errs.push('process must be an array');
+  return errs;
+}
+
+/* Replace the live PITCH_DATA contents in place (keeps all references).   */
+function applyPitchData(obj, opts) {
+  opts = opts || {};
+  const errs = validatePitchData(obj);
+  if (errs.length) { showDataMsg('error', errs); return false; }
+
+  Object.keys(PITCH_DATA).forEach(k => delete PITCH_DATA[k]);
+  Object.assign(PITCH_DATA, obj);
+
+  const name = PITCH_DATA.target.name, tk = PITCH_DATA.target.ticker;
+  const statusEl = document.getElementById('dataSourceStatus');
+  const resetEl  = document.getElementById('resetDataBtn');
+  const selEl    = document.getElementById('companySelect');
+
+  if (selEl && selEl.options.length) selEl.options[0].text = `${name} (${tk})`;
+  document.getElementById('navCompany').textContent = `${name} (${tk})`;
+
+  if (opts.isSample) {
+    if (statusEl) statusEl.textContent = `Using bundled sample · ${name} (${tk})`;
+    if (resetEl)  resetEl.style.display = 'none';
+    showDataMsg('clear');
+  } else {
+    if (statusEl) statusEl.textContent = `Using your data · ${name} (${tk})`;
+    if (resetEl)  resetEl.style.display = '';
+    showDataMsg('success', [
+      `Loaded ${name} (${tk}) — ${PITCH_DATA.tradingComps.length} comps, ` +
+      `${PITCH_DATA.precedentTransactions.length} transactions, ` +
+      `${PITCH_DATA.valuation.methodologies.length} valuation methods. ` +
+      `Press ▶ Run Pitch Agent to generate the deck.`
+    ]);
+  }
+  return true;
+}
+
+function showDataMsg(type, lines) {
+  const el = document.getElementById('dataIoMsg');
+  if (!el) return;
+  if (type === 'clear') { el.className = 'data-io__msg'; el.innerHTML = ''; return; }
+  el.className = 'data-io__msg data-io__msg--' + type;
+  if (type === 'error') {
+    el.innerHTML = '<strong>⚠ Could not load data:</strong><ul>' +
+      lines.map(l => `<li>${escHtml(l)}</li>`).join('') + '</ul>';
+  } else {
+    el.innerHTML = '<strong>✓</strong> ' + lines.map(escHtml).join(' ');
+  }
+}
+
+function downloadTemplate() {
+  const blob = new Blob([JSON.stringify(SAMPLE_DATA, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'pitch-data-template.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function wireDataInputs() {
+  const fileInput   = document.getElementById('dataFileInput');
+  const pasteToggle = document.getElementById('pasteToggleBtn');
+  const pasteArea   = document.getElementById('pasteArea');
+  const applyPaste  = document.getElementById('applyPasteBtn');
+  const dlBtn       = document.getElementById('downloadTemplateBtn');
+  const resetBtn    = document.getElementById('resetDataBtn');
+
+  if (fileInput) fileInput.addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const obj = parsePitchText(reader.result);
+      if (!obj) { showDataMsg('error', [`Could not parse "${file.name}". Provide valid JSON or a data.js file containing PITCH_DATA.`]); return; }
+      applyPitchData(obj);
+    };
+    reader.readAsText(file);
+    fileInput.value = '';   /* allow re-uploading the same filename */
+  });
+
+  if (pasteToggle) pasteToggle.addEventListener('click', () => {
+    const open = pasteArea.style.display !== 'none';
+    pasteArea.style.display = open ? 'none' : 'block';
+    pasteToggle.classList.toggle('data-io__btn--active', !open);
+  });
+
+  if (applyPaste) applyPaste.addEventListener('click', () => {
+    const txt = (document.getElementById('pasteInput').value || '').trim();
+    if (!txt) { showDataMsg('error', ['Paste box is empty.']); return; }
+    const obj = parsePitchText(txt);
+    if (!obj) { showDataMsg('error', ['Could not parse pasted text. Make sure it is valid JSON.']); return; }
+    applyPitchData(obj);
+  });
+
+  if (dlBtn)    dlBtn.addEventListener('click', downloadTemplate);
+  if (resetBtn) resetBtn.addEventListener('click', () =>
+    applyPitchData(JSON.parse(JSON.stringify(SAMPLE_DATA)), { isSample: true }));
+}
 
 /* ─── Step list render ───────────────────────────────────────────────── */
 function renderStepsList() {
@@ -191,9 +373,13 @@ async function runSkill() {
   btn.disabled = true;
   btn.innerHTML = '<span class="run-btn__icon spin">⟳</span><span class="run-btn__text">Running…</span>';
 
+  /* Build the execution log fresh from the active data (sample or uploaded) */
+  const situation = currentSituationLabel();
+  stepLogs = buildStepLogs();
+
   /* Update nav */
   document.getElementById('navCompany').textContent = PITCH_DATA.target.name + ' (' + PITCH_DATA.target.ticker + ')';
-  document.getElementById('navSituation').textContent = 'Exploring Strategic Alternatives';
+  document.getElementById('navSituation').textContent = situation;
   document.getElementById('navStatus').textContent = 'RUNNING';
   document.getElementById('navStatus').style.color = '#f59e0b';
 
@@ -207,7 +393,7 @@ async function runSkill() {
   await sleep(400);
   await appendLog('▶ pitch-agent started', 'step');
   await appendLog('Target: ' + PITCH_DATA.target.name + ' (' + PITCH_DATA.target.ticker + ')', 'info');
-  await appendLog('Situation: Exploring Strategic Alternatives', 'info');
+  await appendLog('Situation: ' + situation, 'info');
   await appendLog('Data: Bloomberg Terminal · PitchBook Data Corp · SEC EDGAR', 'info');
   setLogStatus('Running…');
   await sleep(300);
@@ -264,7 +450,7 @@ async function runStep(i) {
   await appendLog(`─── Step ${step.id}: ${step.title}${step.skill ? ' (' + step.skill + ')' : ''}`, 'step');
 
   /* Log entries */
-  const entries = STEP_LOGS[i];
+  const entries = (stepLogs || buildStepLogs())[i];
   for (const e of entries) {
     await sleep(110);
     await appendLog(e.m, e.t);
@@ -412,11 +598,21 @@ function renderDealsInputCard() {
 function renderAllSlides() {
   renderSlide1(); renderSlide2(); renderSlide3();
   renderSlide4(); renderSlide5(); renderSlide6();
+  updateSlideChrome();
 
   document.querySelectorAll('.slide-tab').forEach(btn => {
     btn.addEventListener('click', () => switchSlide(+btn.dataset.slide));
   });
   switchSlide(1);
+}
+
+/* Refresh the slide footers + deck meta to match the active data. */
+function updateSlideChrome() {
+  const name = (PITCH_DATA.target.name || '').toUpperCase();
+  const sit  = currentSituationLabel().toUpperCase();
+  document.querySelectorAll('.slide-footer span:last-child').forEach(s => {
+    s.textContent = `${name} · ${sit}`;
+  });
 }
 
 function switchSlide(num) {
@@ -616,5 +812,6 @@ function renderSlide6() {
 
 /* ─── Boot ────────────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
-  /* Nothing to pre-render — everything waits for Run click */
+  /* Wire the "feed your own data" controls; the rest waits for Run click */
+  wireDataInputs();
 });
