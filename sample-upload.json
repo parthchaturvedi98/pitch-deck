@@ -1,0 +1,353 @@
+{
+  "meta": {
+    "pitchDate": "June 4, 2026",
+    "dataAsOf": "March 31, 2026",
+    "preparedFor": "Board of Directors — Discussion Purposes Only",
+    "confidentiality": "Confidential — prepared for discussion purposes only.",
+    "dataSourceEquity": "Bloomberg Terminal (as of 31-Mar-2026)",
+    "dataSourceDeals": "PitchBook Data Corp (transactions 2023–2025)",
+    "dataSourceFilings": "VRDX 10-K / 10-Q SEC Filings"
+  },
+  "target": {
+    "name": "Verdex Robotics",
+    "ticker": "VRDX",
+    "exchange": "NYSE",
+    "sector": "Industrial Automation / Warehouse Robotics",
+    "hq": "Pittsburgh, PA",
+    "founded": 2014,
+    "employees": 3100,
+    "description": "Verdex Robotics designs and deploys autonomous mobile robots and AI-driven fleet-orchestration software for large-scale fulfillment and manufacturing operations. Its flagship platform, VerdexOS™, coordinates mixed robot fleets in real time, lifting throughput by an average of 41% versus manual workflows. Verdex serves 420+ enterprise sites across e-commerce, automotive, and third-party logistics, with 91% annual net revenue retention.",
+    "whatsChanged": [
+      {
+        "title": "Reshoring & Automation Capex Surge",
+        "body": "North American manufacturing reshoring pushed warehouse-automation spend to a projected $58B by 2028E, expanding Verdex's serviceable market (Bloomberg Intelligence)."
+      },
+      {
+        "title": "Robotics M&A Heating Up",
+        "body": "Eight sector transactions since March 2023 closed at 16–27x LTM EV/EBITDA, with strategic premia averaging 33% to unaffected price (PitchBook)."
+      },
+      {
+        "title": "Founder Liquidity Event",
+        "body": "Two founding shareholders are seeking partial liquidity, creating a window for a structured strategic process."
+      }
+    ],
+    "financials": {
+      "revenue_ltm": 612.8,
+      "ebitda_ltm": 165.5,
+      "ebitda_margin_ltm": 27.0,
+      "revenue_ntm": 718.4,
+      "ebitda_ntm": 201.2,
+      "revenue_growth_yoy": 17.2,
+      "market_cap": 2480.0,
+      "ev": 2742.0,
+      "net_debt": 262.0,
+      "share_price": 31.80,
+      "shares_out": 78.0,
+      "ev_rev_ltm": 4.5,
+      "ev_ebitda_ltm": 16.6,
+      "ev_ebitda_ntm": 13.6,
+      "pe_ntm": 22.8,
+      "fiscal_period": "LTM ended 31-Mar-2026",
+      "source": "Bloomberg; VRDX 10-K (FY2025) / 10-Q (Q1 2026)"
+    }
+  },
+  "tradingComps": [
+    {
+      "company": "AutoMova Systems",
+      "ticker": "AMVA",
+      "ev": 5120.0,
+      "rev_ltm": 902.4,
+      "ebitda_ltm": 234.6,
+      "rev_ntm": 1048.0,
+      "ebitda_ntm": 283.0,
+      "ev_rev_ltm": 5.7,
+      "ev_ebitda_ltm": 21.8,
+      "ev_ebitda_ntm": 18.1,
+      "pe_ntm": 30.2,
+      "ebitda_margin": 26.0,
+      "rev_growth": 18.0,
+      "outlier": false,
+      "note": null
+    },
+    {
+      "company": "Kinetiq Industrial",
+      "ticker": "KNTQ",
+      "ev": 3380.0,
+      "rev_ltm": 640.0,
+      "ebitda_ltm": 172.8,
+      "rev_ntm": 731.0,
+      "ebitda_ntm": 204.0,
+      "ev_rev_ltm": 5.3,
+      "ev_ebitda_ltm": 19.6,
+      "ev_ebitda_ntm": 16.6,
+      "pe_ntm": 27.4,
+      "ebitda_margin": 27.0,
+      "rev_growth": 14.5,
+      "outlier": false,
+      "note": null
+    },
+    {
+      "company": "PalletPath Inc.",
+      "ticker": "PLPT",
+      "ev": 1980.0,
+      "rev_ltm": 446.0,
+      "ebitda_ltm": 107.0,
+      "rev_ntm": 503.0,
+      "ebitda_ntm": 128.0,
+      "ev_rev_ltm": 4.4,
+      "ev_ebitda_ltm": 18.5,
+      "ev_ebitda_ntm": 15.5,
+      "pe_ntm": 24.6,
+      "ebitda_margin": 24.0,
+      "rev_growth": 12.8,
+      "outlier": false,
+      "note": null
+    },
+    {
+      "company": "Cobalt Fulfillment",
+      "ticker": "CBLT",
+      "ev": 4260.0,
+      "rev_ltm": 712.0,
+      "ebitda_ltm": 199.4,
+      "rev_ntm": 838.0,
+      "ebitda_ntm": 243.0,
+      "ev_rev_ltm": 6.0,
+      "ev_ebitda_ltm": 21.4,
+      "ev_ebitda_ntm": 17.5,
+      "pe_ntm": 29.1,
+      "ebitda_margin": 28.0,
+      "rev_growth": 19.5,
+      "outlier": false,
+      "note": null
+    },
+    {
+      "company": "Strider Automation",
+      "ticker": "STRD",
+      "ev": 2610.0,
+      "rev_ltm": 528.0,
+      "ebitda_ltm": 142.6,
+      "rev_ntm": 606.0,
+      "ebitda_ntm": 170.0,
+      "ev_rev_ltm": 4.9,
+      "ev_ebitda_ltm": 18.3,
+      "ev_ebitda_ntm": 15.4,
+      "pe_ntm": 25.8,
+      "ebitda_margin": 27.0,
+      "rev_growth": 15.2,
+      "outlier": false,
+      "note": null
+    },
+    {
+      "company": "Apex Logistics Tech",
+      "ticker": "APXL",
+      "ev": 18420.0,
+      "rev_ltm": 3120.0,
+      "ebitda_ltm": 561.6,
+      "rev_ntm": 3540.0,
+      "ebitda_ntm": 672.0,
+      "ev_rev_ltm": 5.9,
+      "ev_ebitda_ltm": 32.8,
+      "ev_ebitda_ntm": 27.4,
+      "pe_ntm": 44.0,
+      "ebitda_margin": 18.0,
+      "rev_growth": 13.0,
+      "outlier": true,
+      "note": "Excluded from median — mega-cap scale premium and depressed margins distort comparability"
+    }
+  ],
+  "precedentTransactions": [
+    {
+      "date": "Feb 2025",
+      "acquirer": "Honeywell International",
+      "target": "RoboShip Dynamics",
+      "deal_value": 4120.0,
+      "ev_ebitda": 23.4,
+      "premium": 34,
+      "status": "Closed",
+      "note": null
+    },
+    {
+      "date": "Sep 2024",
+      "acquirer": "Thoma Bravo",
+      "target": "GridMotion Systems",
+      "deal_value": 2360.0,
+      "ev_ebitda": 19.2,
+      "premium": 29,
+      "status": "Closed",
+      "note": null
+    },
+    {
+      "date": "May 2024",
+      "acquirer": "Zebra Technologies",
+      "target": "FleetCore Robotics",
+      "deal_value": 3180.0,
+      "ev_ebitda": 24.8,
+      "premium": 36,
+      "status": "Closed",
+      "note": null
+    },
+    {
+      "date": "Jan 2024",
+      "acquirer": "KKR & Co.",
+      "target": "Lumen Handling",
+      "deal_value": 1540.0,
+      "ev_ebitda": 16.8,
+      "premium": 25,
+      "status": "Closed",
+      "note": "Carve-out; adjusted for stranded-cost add-backs"
+    },
+    {
+      "date": "Aug 2023",
+      "acquirer": "Siemens AG",
+      "target": "Vector Conveyance",
+      "deal_value": 2920.0,
+      "ev_ebitda": 21.1,
+      "premium": 31,
+      "status": "Closed",
+      "note": null
+    },
+    {
+      "date": "Mar 2023",
+      "acquirer": "Rockwell Automation",
+      "target": "Pathline Robotics",
+      "deal_value": 3560.0,
+      "ev_ebitda": 26.9,
+      "premium": 38,
+      "status": "Closed",
+      "note": null
+    }
+  ],
+  "valuation": {
+    "currentPrice": 31.80,
+    "sharesOut": 78.0,
+    "netDebt": 262.0,
+    "methodologies": [
+      {
+        "id": "comps",
+        "name": "Trading Comps",
+        "subtext": "EV/EBITDA 18.3–21.8x · $165.5M LTM EBITDA",
+        "min": 34.50,
+        "median": 39.20,
+        "max": 45.10,
+        "source": "Bloomberg; 5 peers (Apex excluded)"
+      },
+      {
+        "id": "precedents",
+        "name": "Precedent Transactions",
+        "subtext": "EV/EBITDA 19.2–26.9x · $165.5M LTM EBITDA",
+        "min": 37.80,
+        "median": 43.60,
+        "max": 52.40,
+        "source": "PitchBook; 6 transactions Mar 2023–Feb 2025"
+      },
+      {
+        "id": "dcf",
+        "name": "DCF Analysis",
+        "subtext": "WACC 9.5–11.0% · Terminal growth 2.5–3.5%",
+        "min": 36.20,
+        "median": 41.10,
+        "max": 47.30,
+        "source": "Mgmt projections; Bloomberg consensus 2026–2027E"
+      },
+      {
+        "id": "lbo",
+        "name": "Illustrative LBO",
+        "subtext": "Entry 20–22x EV/EBITDA · 5-yr hold · 20–25% IRR",
+        "min": 35.10,
+        "median": 38.40,
+        "max": 42.60,
+        "source": "Illustrative; market leverage from Bloomberg loan comps"
+      }
+    ],
+    "recommendedRange": { "low": 40.00, "high": 48.00 },
+    "recommendedLabel": "Recommended: $40.00–$48.00/share"
+  },
+  "dcf": {
+    "years": [2026, 2027, 2028, 2029, 2030],
+    "revenue": [718.4, 836.9, 968.5, 1110.2, 1259.8],
+    "ebitda": [201.2, 242.7, 290.6, 344.2, 403.1],
+    "ebitda_margin": [28.0, 29.0, 30.0, 31.0, 32.0],
+    "capex_pct": [6.5, 6.2, 5.9, 5.6, 5.3],
+    "fcf": [112.5, 138.4, 168.9, 203.7, 242.6],
+    "wacc_base": 10.25,
+    "wacc_range": [9.5, 11.0],
+    "tgr_base": 3.0,
+    "tgr_range": [2.5, 3.5],
+    "tv_implied_mult": 15.4,
+    "source": "Management projections as of Q4 2025; Bloomberg consensus for 2026–2027E"
+  },
+  "lbo": {
+    "entry_ev": 3475.0,
+    "entry_ebitda_mult": 21.0,
+    "equity_pct": 42.0,
+    "equity": 1460.0,
+    "debt": 2015.0,
+    "debt_ebitda_entry": 5.8,
+    "interest_rate": 7.8,
+    "exit_mult_base": 18.5,
+    "exit_year": 2031,
+    "irr_base": 23.6,
+    "irr_range": [19.4, 27.1],
+    "moic_base": 2.9,
+    "moic_range": [2.3, 3.6],
+    "source": "Illustrative; market leverage based on Bloomberg leveraged loan comps"
+  },
+  "process": [
+    {
+      "step": 1,
+      "title": "Preparation",
+      "duration": "Weeks 1–2",
+      "color": "var(--accent)",
+      "milestones": [
+        "Finalize Confidential Information Memorandum (CIM)",
+        "Approve virtual data room structure",
+        "Sign NDA templates with counsel"
+      ]
+    },
+    {
+      "step": 2,
+      "title": "Broad Marketing",
+      "duration": "Weeks 3–5",
+      "color": "var(--accent)",
+      "milestones": [
+        "Distribute anonymous teaser to 35+ parties",
+        "Execute NDAs with interested parties",
+        "Deliver CIM to qualified bidders"
+      ]
+    },
+    {
+      "step": 3,
+      "title": "First-Round Bids",
+      "duration": "Week 6",
+      "color": "var(--accent)",
+      "milestones": [
+        "Indicative offers (IOIs) due",
+        "Evaluate bids with Board",
+        "Select 6–8 parties to advance"
+      ]
+    },
+    {
+      "step": 4,
+      "title": "Due Diligence",
+      "duration": "Weeks 7–10",
+      "color": "var(--accent)",
+      "milestones": [
+        "Management presentations",
+        "Site visits & customer calls",
+        "Full data room access granted"
+      ]
+    },
+    {
+      "step": 5,
+      "title": "Final Bids & Close",
+      "duration": "Weeks 11–14",
+      "color": "var(--hilite)",
+      "milestones": [
+        "Final binding bids due",
+        "Select winning bidder",
+        "Negotiate & execute definitive agreement",
+        "Public announcement"
+      ]
+    }
+  ]
+}
