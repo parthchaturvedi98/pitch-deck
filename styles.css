@@ -1429,6 +1429,24 @@ body {
   border-radius: 3px;
   white-space: nowrap;
 }
+.output-artifacts .artifact-chip {
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.output-artifacts .artifact-chip:hover {
+  box-shadow: 0 4px 16px rgba(11,37,69,0.14);
+  transform: translateY(-1px);
+}
+.output-artifacts .artifact-chip:hover .artifact-status {
+  background: rgba(27,108,168,0.12);
+  border-color: rgba(27,108,168,0.30);
+  color: var(--accent);
+}
+.artifact-status--downloading {
+  color: var(--muted) !important;
+  background: rgba(107,114,128,0.08) !important;
+  border-color: rgba(107,114,128,0.20) !important;
+}
 
 /* ─── Section hint ───────────────────────────────────────────────── */
 .section-hint {

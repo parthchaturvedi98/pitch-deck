@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -198,21 +199,21 @@
         </div>
 
         <div class="output-artifacts">
-          <div class="artifact-chip">
+          <div class="artifact-chip" id="artifactExcel" title="Click to download Excel Valuation Workbook (.xlsx)">
             <span class="artifact-chip__icon">📊</span>
             <div>
               <div class="artifact-chip__name">Excel Valuation Workbook</div>
               <div class="artifact-chip__desc">Comps · Precedents · DCF · LBO · Football Field</div>
             </div>
-            <span class="artifact-status">✓ Ready</span>
+            <span class="artifact-status" id="artifactExcelStatus">⬇ Download</span>
           </div>
-          <div class="artifact-chip">
+          <div class="artifact-chip" id="artifactDeck" title="Click to download Pitch Deck as HTML (open &amp; print-to-PDF)">
             <span class="artifact-chip__icon">📑</span>
             <div>
               <div class="artifact-chip__name">Pitch Deck (6 Slides)</div>
               <div class="artifact-chip__desc">Situation · Snapshot · Valuation · Comps · Transactions · Process</div>
             </div>
-            <span class="artifact-status">✓ Ready</span>
+            <span class="artifact-status" id="artifactDeckStatus">⬇ Download</span>
           </div>
         </div>
 
