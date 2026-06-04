@@ -1106,6 +1106,116 @@ body {
   font-weight: 600;
 }
 
+/* ─── Feed-your-own-data panel ───────────────────────────────────── */
+.data-io {
+  margin-bottom: 20px;
+  padding: 16px 18px;
+  background: var(--panel);
+  border: 1px solid #D4DCE8;
+  border-radius: var(--radius);
+}
+.data-io__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.data-io__title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--primary);
+}
+.data-io__status {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(27,108,168,0.10);
+  border: 1px solid rgba(27,108,168,0.20);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.data-io__controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.data-io__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.data-io__btn:hover { background: #155d96; border-color: #155d96; }
+.data-io__btn--ghost {
+  background: var(--white);
+  color: var(--secondary);
+  border-color: #D4DCE8;
+}
+.data-io__btn--ghost:hover { background: var(--white); border-color: var(--accent); color: var(--accent); }
+.data-io__btn--active { border-color: var(--accent); color: var(--accent); }
+.data-io__paste { margin-top: 12px; }
+.data-io__textarea {
+  width: 100%;
+  min-height: 160px;
+  padding: 12px;
+  border: 1.5px solid #D4DCE8;
+  border-radius: var(--radius-sm);
+  font-family: 'Fira Code', monospace;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--white);
+  resize: vertical;
+}
+.data-io__textarea:focus { outline: none; border-color: var(--accent); }
+.data-io__paste-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.data-io__hint {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.data-io__hint code {
+  background: var(--white);
+  border: 1px solid #D4DCE8;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-family: 'Fira Code', monospace;
+}
+.data-io__msg { margin-top: 10px; font-size: 11.5px; line-height: 1.55; }
+.data-io__msg:empty { display: none; }
+.data-io__msg--success {
+  color: var(--positive);
+  background: rgba(46,125,50,0.08);
+  border: 1px solid rgba(46,125,50,0.20);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+.data-io__msg--error {
+  color: #b42318;
+  background: rgba(180,35,24,0.06);
+  border: 1px solid rgba(180,35,24,0.25);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+.data-io__msg--error ul { margin: 4px 0 0 18px; }
+.data-io__msg--error li { margin: 1px 0; }
+
 /* ─── Run button ─────────────────────────────────────────────────── */
 .run-btn {
   display: flex;
@@ -1243,9 +1353,9 @@ body {
 }
 .step-item__state { flex-shrink: 0; width: 20px; text-align: center; }
 .state-dot { font-size: 11px; }
-.state-dot--pending::before { content: 'o'; color: rgba(255,255,255,0.25); }
+.state-dot--pending::before { content: '○'; color: rgba(255,255,255,0.25); }
 .state-dot--running { animation: spin 0.8s linear infinite; display: inline-block; }
-.state-dot--running::before { content: 'o'; color: #f59e0b; }
+.state-dot--running::before { content: '⟳'; color: #f59e0b; }
 .state-dot--done { color: #3fb950; font-weight: 700; font-size: 12px; }
 
 /* ─── Execution log ──────────────────────────────────────────────── */

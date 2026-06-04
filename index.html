@@ -13,6 +13,7 @@
 </head>
 <body>
 
+  <!-- ─── Nav ─────────────────────────────────────────────────────────── -->
   <nav class="topnav">
     <div class="topnav__inner">
       <div class="topnav__brand">
@@ -30,6 +31,7 @@
     </div>
   </nav>
 
+  <!-- ─── Hero ─────────────────────────────────────────────────────────── -->
   <div class="hero hero--compact">
     <div class="hero__inner">
       <div>
@@ -50,6 +52,7 @@
     </div>
   </div>
 
+  <!-- ─── 1. Input Console ─────────────────────────────────────────────── -->
   <div class="console-section">
     <div class="console-card">
       <div class="console-card__header">
@@ -75,12 +78,45 @@
         <div class="console-field">
           <label class="console-label">Data Sources</label>
           <div class="console-sources">
-            <label class="source-toggle source-toggle--on"><input type="checkbox" checked disabled /> Bloomberg Terminal</label>
-            <label class="source-toggle source-toggle--on"><input type="checkbox" checked disabled /> PitchBook Data Corp</label>
-            <label class="source-toggle source-toggle--on"><input type="checkbox" checked disabled /> SEC EDGAR Filings</label>
+            <label class="source-toggle source-toggle--on">
+              <input type="checkbox" checked disabled /> Bloomberg Terminal
+            </label>
+            <label class="source-toggle source-toggle--on">
+              <input type="checkbox" checked disabled /> PitchBook Data Corp
+            </label>
+            <label class="source-toggle source-toggle--on">
+              <input type="checkbox" checked disabled /> SEC EDGAR Filings
+            </label>
           </div>
         </div>
       </div>
+
+      <!-- Feed your own data -->
+      <div class="data-io">
+        <div class="data-io__head">
+          <span class="data-io__title">📥 Feed Your Own Data</span>
+          <span class="data-io__status" id="dataSourceStatus">Using bundled sample · Nexaris Technologies (NXRS)</span>
+        </div>
+        <div class="data-io__controls">
+          <label class="data-io__btn">
+            <input type="file" id="dataFileInput" accept=".json,.js,application/json" hidden />
+            ⬆ Upload data file
+          </label>
+          <button class="data-io__btn data-io__btn--ghost" id="pasteToggleBtn" type="button">✎ Paste JSON</button>
+          <button class="data-io__btn data-io__btn--ghost" id="downloadTemplateBtn" type="button">⬇ Download sample template</button>
+          <button class="data-io__btn data-io__btn--ghost" id="resetDataBtn" type="button" style="display:none">↺ Reset to sample</button>
+        </div>
+        <div class="data-io__paste" id="pasteArea" style="display:none">
+          <textarea id="pasteInput" class="data-io__textarea" spellcheck="false"
+            placeholder="Paste your PITCH_DATA JSON here — download the sample template first to see the exact shape…"></textarea>
+          <div class="data-io__paste-actions">
+            <button class="data-io__btn" id="applyPasteBtn" type="button">Apply JSON</button>
+            <span class="data-io__hint">Tip: download the template, edit the numbers, then upload or paste it back. Accepts pure JSON or a <code>data.js</code> file.</span>
+          </div>
+        </div>
+        <div class="data-io__msg" id="dataIoMsg"></div>
+      </div>
+
       <div class="console-actions">
         <div class="console-companion">
           <span class="console-companion__label">Orchestrates:</span>
@@ -99,6 +135,7 @@
     </div>
   </div>
 
+  <!-- ─── 2. Execution view (hidden until Run is clicked) ──────────────── -->
   <div class="exec-section" id="execSection" style="display:none">
     <div class="exec-inner">
       <div class="exec-header">
@@ -113,8 +150,14 @@
           <span class="exec-progress-label" id="progressLabel">0 / 9 steps</span>
         </div>
       </div>
+
       <div class="exec-layout">
-        <div class="steps-list" id="stepsList"></div>
+        <!-- Left: Step pipeline -->
+        <div class="steps-list" id="stepsList">
+          <!-- Populated by renderStepsList() -->
+        </div>
+
+        <!-- Right: Execution log -->
         <div class="exec-log-wrap">
           <div class="exec-log-header">
             <span>● Execution Log</span>
@@ -126,6 +169,7 @@
     </div>
   </div>
 
+  <!-- ─── 3. Output: Data Inputs (revealed after step 3) ───────────────── -->
   <div id="dataSection" style="display:none">
     <div class="section">
       <div class="section-header">
@@ -142,6 +186,7 @@
     </div>
   </div>
 
+  <!-- ─── 4. Output: Generated Pitch Deck (revealed after step 9) ──────── -->
   <div id="outputSection" style="display:none">
     <div class="deck-section" id="deck">
       <div class="deck-inner">
@@ -149,12 +194,29 @@
           <span class="section-label">OUTPUT</span>
           <h2>Generated Pitch Deck</h2>
           <div class="section-rule" style="background:#D4DCE8"></div>
-          <span style="font-size:11px;color:var(--muted);white-space:nowrap">6 Slides · First Draft</span>
+          <span id="deckMeta" style="font-size:11px;color:var(--muted);white-space:nowrap">6 Slides · First Draft</span>
         </div>
+
         <div class="output-artifacts">
-          <div class="artifact-chip"><span class="artifact-chip__icon">📊</span><div><div class="artifact-chip__name">Excel Valuation Workbook</div><div class="artifact-chip__desc">Comps · Precedents · DCF · LBO · Football Field</div></div><span class="artifact-status">✓ Ready</span></div>
-          <div class="artifact-chip"><span class="artifact-chip__icon">📑</span><div><div class="artifact-chip__name">Pitch Deck (6 Slides)</div><div class="artifact-chip__desc">Situation · Snapshot · Valuation · Comps · Transactions · Process</div></div><span class="artifact-status">✓ Ready</span></div>
+          <div class="artifact-chip">
+            <span class="artifact-chip__icon">📊</span>
+            <div>
+              <div class="artifact-chip__name">Excel Valuation Workbook</div>
+              <div class="artifact-chip__desc">Comps · Precedents · DCF · LBO · Football Field</div>
+            </div>
+            <span class="artifact-status">✓ Ready</span>
+          </div>
+          <div class="artifact-chip">
+            <span class="artifact-chip__icon">📑</span>
+            <div>
+              <div class="artifact-chip__name">Pitch Deck (6 Slides)</div>
+              <div class="artifact-chip__desc">Situation · Snapshot · Valuation · Comps · Transactions · Process</div>
+            </div>
+            <span class="artifact-status">✓ Ready</span>
+          </div>
         </div>
+
+        <!-- Slide tabs -->
         <div class="slide-tabs" style="margin-top:20px">
           <button class="slide-tab active" data-slide="1">01 — Situation</button>
           <button class="slide-tab" data-slide="2">02 — Snapshot</button>
@@ -163,19 +225,108 @@
           <button class="slide-tab" data-slide="5">05 — Transactions</button>
           <button class="slide-tab" data-slide="6">06 — Process</button>
         </div>
-        <div class="slide-panel active" data-slide="1"><div class="slide-topbar"></div><div class="slide-titlebar"><h3>Situation Overview</h3><span class="slide-num">SLIDE 01 / 06 · Generated by: sector-overview</span></div><div class="slide-body" id="slide1Body"></div><div class="slide-footer"><span>Confidential — prepared for discussion purposes only.</span><span>1</span><span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span></div></div>
-        <div class="slide-panel" data-slide="2"><div class="slide-topbar"></div><div class="slide-titlebar"><h3>Company Snapshot</h3><span class="slide-num">SLIDE 02 / 06 · Generated by: pitch-deck</span></div><div class="slide-body" id="slide2Body"></div><div class="slide-footer"><span>Confidential — prepared for discussion purposes only.</span><span>2</span><span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span></div></div>
-        <div class="slide-panel" data-slide="3"><div class="slide-topbar"></div><div class="slide-titlebar"><h3>Valuation Summary — Football Field</h3><span class="slide-num">SLIDE 03 / 06 · Generated by: dcf-model · lbo-model</span></div><div class="slide-body" id="slide3Body"></div><div class="slide-footer"><span>Confidential — prepared for discussion purposes only.</span><span>3</span><span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span></div></div>
-        <div class="slide-panel" data-slide="4"><div class="slide-topbar"></div><div class="slide-titlebar"><h3>Trading Comparables Detail</h3><span class="slide-num">SLIDE 04 / 06 · Generated by: comps-analysis · Bloomberg</span></div><div class="slide-body" id="slide4Body"></div><div class="slide-footer"><span>Confidential — prepared for discussion purposes only.</span><span>4</span><span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span></div></div>
-        <div class="slide-panel" data-slide="5"><div class="slide-topbar"></div><div class="slide-titlebar"><h3>Precedent Transactions Detail</h3><span class="slide-num">SLIDE 05 / 06 · Generated by: comps-analysis · PitchBook</span></div><div class="slide-body" id="slide5Body"></div><div class="slide-footer"><span>Confidential — prepared for discussion purposes only.</span><span>5</span><span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span></div></div>
-        <div class="slide-panel" data-slide="6"><div class="slide-topbar"></div><div class="slide-titlebar"><h3>Illustrative Sale Process</h3><span class="slide-num">SLIDE 06 / 06 · Generated by: pitch-deck</span></div><div class="slide-body" id="slide6Body"></div><div class="slide-footer"><span>Confidential — prepared for discussion purposes only.</span><span>6</span><span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span></div></div>
+
+        <!-- Slide 1 -->
+        <div class="slide-panel active" data-slide="1">
+          <div class="slide-topbar"></div>
+          <div class="slide-titlebar">
+            <h3>Situation Overview</h3>
+            <span class="slide-num">SLIDE 01 / 06 · Generated by: sector-overview</span>
+          </div>
+          <div class="slide-body" id="slide1Body"></div>
+          <div class="slide-footer">
+            <span>Confidential — prepared for discussion purposes only.</span>
+            <span>1</span>
+            <span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide-panel" data-slide="2">
+          <div class="slide-topbar"></div>
+          <div class="slide-titlebar">
+            <h3>Company Snapshot</h3>
+            <span class="slide-num">SLIDE 02 / 06 · Generated by: pitch-deck</span>
+          </div>
+          <div class="slide-body" id="slide2Body"></div>
+          <div class="slide-footer">
+            <span>Confidential — prepared for discussion purposes only.</span>
+            <span>2</span>
+            <span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide-panel" data-slide="3">
+          <div class="slide-topbar"></div>
+          <div class="slide-titlebar">
+            <h3>Valuation Summary — Football Field</h3>
+            <span class="slide-num">SLIDE 03 / 06 · Generated by: dcf-model · lbo-model</span>
+          </div>
+          <div class="slide-body" id="slide3Body"></div>
+          <div class="slide-footer">
+            <span>Confidential — prepared for discussion purposes only.</span>
+            <span>3</span>
+            <span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide-panel" data-slide="4">
+          <div class="slide-topbar"></div>
+          <div class="slide-titlebar">
+            <h3>Trading Comparables Detail</h3>
+            <span class="slide-num">SLIDE 04 / 06 · Generated by: comps-analysis · Bloomberg</span>
+          </div>
+          <div class="slide-body" id="slide4Body"></div>
+          <div class="slide-footer">
+            <span>Confidential — prepared for discussion purposes only.</span>
+            <span>4</span>
+            <span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span>
+          </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide-panel" data-slide="5">
+          <div class="slide-topbar"></div>
+          <div class="slide-titlebar">
+            <h3>Precedent Transactions Detail</h3>
+            <span class="slide-num">SLIDE 05 / 06 · Generated by: comps-analysis · PitchBook</span>
+          </div>
+          <div class="slide-body" id="slide5Body"></div>
+          <div class="slide-footer">
+            <span>Confidential — prepared for discussion purposes only.</span>
+            <span>5</span>
+            <span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span>
+          </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide-panel" data-slide="6">
+          <div class="slide-topbar"></div>
+          <div class="slide-titlebar">
+            <h3>Illustrative Sale Process</h3>
+            <span class="slide-num">SLIDE 06 / 06 · Generated by: pitch-deck</span>
+          </div>
+          <div class="slide-body" id="slide6Body"></div>
+          <div class="slide-footer">
+            <span>Confidential — prepared for discussion purposes only.</span>
+            <span>6</span>
+            <span style="font-weight:700;color:var(--secondary)">NEXARIS TECHNOLOGIES · STRATEGIC ALTERNATIVES</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
+  <!-- ─── Footer ──────────────────────────────────────────────────────── -->
   <footer class="site-footer">
     <p><strong>Pitch Agent Skill Visualizer</strong> · pitch-agent.skill.md · deck-template.md</p>
-    <p style="margin-top:4px">Market data: <strong>Bloomberg Terminal</strong> as of 31-Mar-2025 · Transactions: <strong>PitchBook Data Corp</strong> Apr 2022–Apr 2024</p>
+    <p style="margin-top:4px">
+      Market data: <strong>Bloomberg Terminal</strong> as of 31-Mar-2025 ·
+      Transactions: <strong>PitchBook Data Corp</strong> Apr 2022–Apr 2024
+    </p>
     <p style="margin-top:4px">All figures fabricated — illustrative purposes only. Not investment advice.</p>
   </footer>
 
