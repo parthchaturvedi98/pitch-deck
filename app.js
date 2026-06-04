@@ -542,7 +542,7 @@ function renderTargetCard() {
       <div class="input-card__header">${t.name} (${t.ticker})<span class="input-card__source">Bloomberg / Filings</span></div>
       <div class="input-card__body">
         <div class="stat-grid">
-          <div class="stat-cell"><div class="stat-cell__val">${fmt.usd(f.share_price)}</div><div class="stat-cell__lbl">Share Price</div><div class="stat-cell__sub">NASDAQ: ${t.ticker}</div></div>
+          <div class="stat-cell"><div class="stat-cell__val">${fmt.usd(f.share_price)}</div><div class="stat-cell__lbl">Share Price</div><div class="stat-cell__sub">${t.exchange}: ${t.ticker}</div></div>
           <div class="stat-cell"><div class="stat-cell__val">${fmt.usdB(f.ev)}</div><div class="stat-cell__lbl">Enterprise Value</div><div class="stat-cell__sub">Market cap + net debt</div></div>
           <div class="stat-cell"><div class="stat-cell__val">${fmt.usdM(f.revenue_ltm)}</div><div class="stat-cell__lbl">LTM Revenue</div><div class="stat-cell__sub">+${fmt.pct(f.revenue_growth_yoy)} YoY</div></div>
           <div class="stat-cell"><div class="stat-cell__val">${fmt.usdM(f.ebitda_ltm)}</div><div class="stat-cell__lbl">LTM EBITDA</div><div class="stat-cell__sub">${fmt.pct(f.ebitda_margin_ltm)} margin</div></div>
@@ -631,7 +631,7 @@ function renderSlide1() {
     <div class="situation-grid">
       <div class="narrative">
         <p><strong style="color:var(--primary)">${t.name}</strong> is a ${t.sector} company headquartered
-        in ${t.hq} (founded ${t.founded}, ~${fmt.int(t.employees)} employees, NASDAQ: ${t.ticker}).
+        in ${t.hq} (founded ${t.founded}, ~${fmt.int(t.employees)} employees, ${t.exchange}: ${t.ticker}).
         The Board is exploring strategic alternatives following sustained organic growth and accelerating sector M&amp;A.</p>
         <p>${t.description}</p>
         <p>Revenue has grown at a <strong>${fmt.pct(t.financials.revenue_growth_yoy)} CAGR</strong> over three years,
@@ -721,7 +721,7 @@ function renderSlide3() {
           <div class="val-recommended__range">${fmt.usd(v.recommendedRange.low)} – ${fmt.usd(v.recommendedRange.high)}<span style="font-size:13px;font-weight:600"> /share</span></div>
           <div style="font-size:11px;color:var(--hilite);margin-top:6px;opacity:0.85">Reflects control premium over current price of ${fmt.usd(v.currentPrice)}.</div>
         </div>
-        <div class="source-line mt-8">Current price: <strong>${fmt.usd(v.currentPrice)}</strong> (NASDAQ, 31-Mar-2025)</div>
+        <div class="source-line mt-8">Current price: <strong>${fmt.usd(v.currentPrice)}</strong> (${PITCH_DATA.target.exchange}, ${PITCH_DATA.meta.dataAsOf})</div>
       </div>
     </div>`;
   requestAnimationFrame(initFootballField);
@@ -773,8 +773,8 @@ function renderSlide4() {
         <tr class="median-row"><td colspan="2">Peer Median (ex. outlier)</td><td>—</td><td>${fmt.mult(mER)}</td><td>${fmt.mult(mEL)}</td><td>${fmt.mult(mEN)}</td><td>${fmt.mult(mPE)}</td><td>${fmt.pct(mMa)}</td><td>${fmt.pct(mGr)}</td></tr>
       </tbody>
     </table></div>
-    <p class="outlier-note">† Helix Networks (HLXN) excluded from median — large-cap premium and cloud-transition phase distort margins.</p>
-    <div class="source-line mt-8"><strong>Source:</strong> ${PITCH_DATA.meta.dataSourceEquity}. LTM ended 31-Mar-2025. NTM = Bloomberg median consensus.</div>`;
+    ${(() => { const o = peers.find(p=>p.outlier); return o ? `<p class="outlier-note">† ${o.company} (${o.ticker}) excluded from median — ${o.note || 'distorts comparable margins'}.</p>` : ''; })()}
+    <div class="source-line mt-8"><strong>Source:</strong> ${PITCH_DATA.meta.dataSourceEquity}. LTM as of ${PITCH_DATA.meta.dataAsOf}. NTM = Bloomberg median consensus.</div>`;
 }
 
 function renderSlide5() {
