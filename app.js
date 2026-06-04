@@ -810,8 +810,271 @@ function renderSlide6() {
     <p class="process-note">Illustrative only — not a commitment to a process or timeline.</p>`;
 }
 
+/* ─── Download: Excel Valuation Workbook ─────────────────────────────── */
+function downloadExcelWorkbook() {
+  if (typeof XLSX === 'undefined') {
+    alert('SheetJS library not loaded — please refresh and try again.');
+    return;
+  }
+  const d      = PITCH_DATA;
+  const t      = d.target || {}, f = t.financials || {};
+  const comps  = Array.isArray(d.tradingComps) ? d.tradingComps : [];
+  const txns   = Array.isArray(d.precedentTransactions) ? d.precedentTransactions : [];
+  const peers  = comps.filter(c => !c.outlier);
+  const dcf    = d.dcf  || {};
+  const lbo    = d.lbo  || {};
+  const val    = d.valuation || {};
+  const methods = Array.isArray(val.methodologies) ? val.methodologies : [];
+  const wb     = XLSX.utils.book_new();
+
+  /* Sheet 1 — Target Overview */
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+    ['Field', 'Value'],
+    ['Company', t.name || ''], ['Ticker', t.ticker || ''], ['Exchange', t.exchange || ''],
+    ['Sector', t.sector || ''], ['HQ', t.hq || ''], ['Founded', t.founded || ''],
+    ['Employees', t.employees || ''], [],
+    ['Financials ($M unless noted)', ''],
+    ['Revenue LTM', f.revenue_ltm], ['EBITDA LTM', f.ebitda_ltm],
+    ['EBITDA Margin LTM', `${f.ebitda_margin_ltm}%`],
+    ['Revenue NTM', f.revenue_ntm], ['EBITDA NTM', f.ebitda_ntm],
+    ['Revenue Growth YoY', `${f.revenue_growth_yoy}%`],
+    ['Market Cap', f.market_cap], ['Enterprise Value', f.ev], ['Net Debt', f.net_debt],
+    ['Share Price', `$${f.share_price}`], ['Shares Outstanding (M)', f.shares_out],
+    ['EV/Revenue LTM', `${f.ev_rev_ltm}×`], ['EV/EBITDA LTM', `${f.ev_ebitda_ltm}×`],
+    ['EV/EBITDA NTM', `${f.ev_ebitda_ntm}×`], ['P/E NTM', `${f.pe_ntm}×`], [],
+    ['Source', (f.source || '') + (d.meta && d.meta.dataAsOf ? ' | ' + d.meta.dataAsOf : '')]
+  ]), 'Target Overview');
+
+  /* Sheet 2 — Trading Comps */
+  const chdr = ['Company','Ticker','EV ($M)','Rev LTM','EBITDA LTM','Rev NTM','EBITDA NTM',
+    'EV/Rev LTM','EV/EBITDA LTM','EV/EBITDA NTM','P/E NTM','EBITDA Margin','Rev Growth','Note'];
+  const cMed = peers.length ? [
+    'Peer Median (ex. outlier)', '',
+    +median(peers.map(c=>c.ev)).toFixed(1),
+    +median(peers.map(c=>c.rev_ltm)).toFixed(1),
+    +median(peers.map(c=>c.ebitda_ltm)).toFixed(1),
+    +median(peers.map(c=>c.rev_ntm)).toFixed(1),
+    +median(peers.map(c=>c.ebitda_ntm)).toFixed(1),
+    median(peers.map(c=>c.ev_rev_ltm)).toFixed(1) + '×',
+    median(peers.map(c=>c.ev_ebitda_ltm)).toFixed(1) + '×',
+    median(peers.map(c=>c.ev_ebitda_ntm)).toFixed(1) + '×',
+    median(peers.map(c=>c.pe_ntm)).toFixed(1) + '×',
+    median(peers.map(c=>c.ebitda_margin)).toFixed(1) + '%',
+    median(peers.map(c=>c.rev_growth)).toFixed(1) + '%', ''
+  ] : [];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+    chdr,
+    ...comps.map(c => [c.company, c.ticker, c.ev, c.rev_ltm, c.ebitda_ltm, c.rev_ntm,
+      c.ebitda_ntm, c.ev_rev_ltm, c.ev_ebitda_ltm, c.ev_ebitda_ntm, c.pe_ntm,
+      `${c.ebitda_margin}%`, `${c.rev_growth}%`, c.outlier ? 'Excluded (outlier)' : '']),
+    [], ...( cMed.length ? [cMed] : [] ), [],
+    ['Source', (d.meta && d.meta.dataSourceEquity) || '']
+  ]), 'Trading Comps');
+
+  /* Sheet 3 — Precedent Transactions */
+  const tMed = txns.length ? [
+    'Median', '', '',
+    +median(txns.map(x=>x.deal_value)).toFixed(1),
+    median(txns.map(x=>x.ev_ebitda)).toFixed(1) + '×',
+    median(txns.map(x=>x.premium)).toFixed(0) + '%', '', ''
+  ] : [];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+    ['Date','Acquirer','Target','Deal Value ($M)','EV/EBITDA','Premium (%)','Status','Notes'],
+    ...txns.map(tx => [tx.date, tx.acquirer, tx.target, tx.deal_value,
+      tx.ev_ebitda, `${tx.premium}%`, tx.status, tx.note || '']),
+    [], ...( tMed.length ? [tMed] : [] ), [],
+    ['Source', (d.meta && d.meta.dataSourceDeals) || '']
+  ]), 'Precedent Transactions');
+
+  /* Sheet 4 — DCF Projections */
+  const yrs = dcf.years || [];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+    ['DCF Projections', ...yrs.map(y => y + 'E')],
+    ['Revenue ($M)', ...(dcf.revenue || [])],
+    ['EBITDA ($M)', ...(dcf.ebitda || [])],
+    ['EBITDA Margin (%)', ...(dcf.ebitda_margin || []).map(v => `${v}%`)],
+    ['CapEx (% Revenue)', ...(dcf.capex_pct || []).map(v => `${v}%`)],
+    ['Free Cash Flow ($M)', ...(dcf.fcf || [])], [],
+    ['WACC Base', `${dcf.wacc_base}%`, 'Range', `${(dcf.wacc_range||[])[0]||''}%–${(dcf.wacc_range||[])[1]||''}%`],
+    ['Terminal Growth (Base)', `${dcf.tgr_base}%`, 'Range', `${(dcf.tgr_range||[])[0]||''}%–${(dcf.tgr_range||[])[1]||''}%`],
+    ['TV Implied Multiple', `${dcf.tv_implied_mult}×`], [],
+    ['Source', dcf.source || '']
+  ]), 'DCF Projections');
+
+  /* Sheet 5 — LBO Model */
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+    ['LBO Model (Illustrative)'], [],
+    ['Entry EV ($M)', lbo.entry_ev],
+    ['Entry EV/EBITDA', `${lbo.entry_ebitda_mult}×`],
+    ['Equity (%)', `${lbo.equity_pct}%`], ['Equity ($M)', lbo.equity],
+    ['Debt ($M)', lbo.debt], ['Debt/EBITDA at Entry', `${lbo.debt_ebitda_entry}×`],
+    ['Interest Rate', `${lbo.interest_rate}%`],
+    ['Exit EV/EBITDA (Base)', `${lbo.exit_mult_base}×`], ['Exit Year', lbo.exit_year], [],
+    ['Returns', 'Base', 'Low', 'High'],
+    ['IRR', `${lbo.irr_base}%`, `${(lbo.irr_range||[])[0]||''}%`, `${(lbo.irr_range||[])[1]||''}%`],
+    ['MOIC', `${lbo.moic_base}×`, `${(lbo.moic_range||[])[0]||''}×`, `${(lbo.moic_range||[])[1]||''}×`], [],
+    ['Source', lbo.source || '']
+  ]), 'LBO Model');
+
+  /* Sheet 6 — Football Field */
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+    ['Methodology', 'Min ($/share)', 'Median ($/share)', 'Max ($/share)', 'Assumptions'],
+    ...methods.map(m => [m.name, m.min, m.median, m.max, m.subtext || '']), [],
+    ['Current Price', `$${val.currentPrice || ''}`],
+    ['Recommended Range',
+      `$${val.recommendedRange ? val.recommendedRange.low : ''}`,
+      '–',
+      `$${val.recommendedRange ? val.recommendedRange.high : ''}`, 'per share'], [],
+    ['Source', methods.map(m => m.source).filter(Boolean).join('; ')]
+  ]), 'Football Field');
+
+  XLSX.writeFile(wb, `${(t.ticker || 'TARGET').toUpperCase()}_Valuation_Workbook.xlsx`);
+}
+
+/* ─── Download: Pitch Deck HTML ──────────────────────────────────────── */
+async function downloadPitchDeck() {
+  const d   = PITCH_DATA;
+  const t   = d.target || {};
+  const sit = currentSituationLabel();
+  const name   = t.name  || 'Target';
+  const ticker = (t.ticker || 'TARGET').toUpperCase();
+  const confidentiality = (d.meta && d.meta.confidentiality) || 'Confidential — prepared for discussion purposes only.';
+
+  /* Switch to slide 3 momentarily so its Chart.js canvas is rendered */
+  const prevTab = document.querySelector('.slide-tab.active');
+  const prevNum = prevTab ? +prevTab.dataset.slide : 1;
+  if (prevNum !== 3) {
+    switchSlide(3);
+    await new Promise(r => setTimeout(r, 280));
+  }
+
+  /* Fetch styles.css for a self-contained HTML file */
+  let cssText = '';
+  try {
+    const r = await fetch('./styles.css');
+    if (r.ok) cssText = await r.text();
+  } catch (e) { /* skip if unavailable */ }
+
+  const titles = [
+    'Situation Overview', 'Company Snapshot', 'Valuation Summary — Football Field',
+    'Trading Comparables Detail', 'Precedent Transactions Detail', 'Illustrative Sale Process'
+  ];
+  const generators = [
+    'sector-overview', 'pitch-deck', 'dcf-model · lbo-model',
+    'comps-analysis · Bloomberg', 'comps-analysis · PitchBook', 'pitch-deck'
+  ];
+
+  const slidesHTML = titles.map((title, i) => {
+    const num    = i + 1;
+    const bodyEl = document.getElementById(`slide${num}Body`);
+    let   body   = bodyEl ? bodyEl.innerHTML : '<p style="color:#aaa;padding:20px">Not rendered.</p>';
+
+    /* Convert canvas to data-URL image so it survives as static HTML */
+    if (num === 3 && bodyEl) {
+      const canvas = bodyEl.querySelector('canvas');
+      if (canvas) {
+        try {
+          const img = `<img src="${canvas.toDataURL('image/png')}" style="width:100%;max-height:300px;object-fit:contain;display:block" />`;
+          body = body.replace(/<canvas[\s\S]*?<\/canvas>/i, img);
+        } catch (e) { /* tainted canvas fallback: leave body as-is */ }
+      }
+    }
+
+    return `
+  <div class="slide-panel active" style="page-break-after:${i < titles.length - 1 ? 'always' : 'avoid'}">
+    <div class="slide-topbar"></div>
+    <div class="slide-titlebar">
+      <h3>${title}</h3>
+      <span class="slide-num">SLIDE 0${num} / 06 · Generated by: ${generators[i]}</span>
+    </div>
+    <div class="slide-body">${body}</div>
+    <div class="slide-footer">
+      <span>${confidentiality}</span>
+      <span>${num}</span>
+      <span style="font-weight:700;color:var(--secondary)">${name.toUpperCase()} · ${sit.toUpperCase()}</span>
+    </div>
+  </div>`;
+  }).join('\n');
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>${name} — Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+${cssText}
+body { background: #eef2f7; padding: 40px 24px; margin: 0; }
+.slide-panel { margin: 0 auto 40px; max-width: 1100px; display: block !important; }
+@media print {
+  body { background: #fff; padding: 0; }
+  .slide-panel { max-width: none; margin: 0; page-break-after: always; }
+  .slide-panel:last-of-type { page-break-after: avoid; }
+}
+</style>
+</head>
+<body>
+${slidesHTML}
+<p style="text-align:center;font-family:sans-serif;font-size:11px;color:#9ca3af;margin-top:8px;margin-bottom:40px">
+  Generated by Pitch Agent Skill Visualizer · ${new Date().toLocaleDateString()} ·
+  Open in browser &amp; use Print → Save as PDF to produce a PDF.
+</p>
+</body>
+</html>`;
+
+  /* Restore original slide */
+  if (prevNum !== 3) switchSlide(prevNum);
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `${ticker}_Pitch_Deck.html`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+}
+
+/* ─── Wire artifact chip click handlers ──────────────────────────────── */
+function wireArtifactChips() {
+  const excelChip = document.getElementById('artifactExcel');
+  const deckChip  = document.getElementById('artifactDeck');
+
+  if (excelChip) {
+    excelChip.addEventListener('click', () => {
+      const badge = document.getElementById('artifactExcelStatus');
+      if (badge) { badge.textContent = '⏳ Building…'; badge.className = 'artifact-status artifact-status--downloading'; }
+      try {
+        downloadExcelWorkbook();
+        if (badge) { badge.textContent = '✓ Downloaded'; badge.className = 'artifact-status'; }
+      } catch (e) {
+        if (badge) { badge.textContent = '⬇ Download'; badge.className = 'artifact-status'; }
+        console.error('Excel download failed:', e);
+        alert('Excel download failed: ' + e.message);
+      }
+    });
+  }
+
+  if (deckChip) {
+    deckChip.addEventListener('click', async () => {
+      const badge = document.getElementById('artifactDeckStatus');
+      if (badge) { badge.textContent = '⏳ Building…'; badge.className = 'artifact-status artifact-status--downloading'; }
+      try {
+        await downloadPitchDeck();
+        if (badge) { badge.textContent = '✓ Downloaded'; badge.className = 'artifact-status'; }
+      } catch (e) {
+        if (badge) { badge.textContent = '⬇ Download'; badge.className = 'artifact-status'; }
+        console.error('Deck download failed:', e);
+        alert('Deck download failed: ' + e.message);
+      }
+    });
+  }
+}
+
 /* ─── Boot ────────────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   /* Wire the "feed your own data" controls; the rest waits for Run click */
   wireDataInputs();
+  wireArtifactChips();
 });
